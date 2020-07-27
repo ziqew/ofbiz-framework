@@ -52,7 +52,7 @@ public class Converters {
         }
     }
 
-    private Converters() {}
+    private Converters() { }
 
     /** Returns an appropriate <code>Converter</code> instance for
      * <code>sourceClass</code> and <code>targetClass</code>. If no matching
@@ -193,11 +193,13 @@ OUTER:
         sb.append(targetClass.getName());
         String key = sb.toString();
         if (converterMap.putIfAbsent(key, converter) == null) {
-            if (Debug.verboseOn()) Debug.logVerbose("Registered converter " + converter.getClass().getName(), MODULE);
+            if (Debug.verboseOn()) {
+                Debug.logVerbose("Registered converter " + converter.getClass().getName(), MODULE);
+            }
         }
     }
 
-    protected static class PassThruConverterCreator implements ConverterCreator{
+    protected static class PassThruConverterCreator implements ConverterCreator {
         protected PassThruConverterCreator() {
         }
 

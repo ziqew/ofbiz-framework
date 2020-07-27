@@ -104,7 +104,9 @@ public class ServiceMultiEventHandler implements EventHandler {
         if (serviceName == null) {
             throw new EventHandlerException("Service name (eventMethod) cannot be null");
         }
-        if (Debug.verboseOn()) Debug.logVerbose("[Set mode/service]: " + mode + "/" + serviceName, MODULE);
+        if (Debug.verboseOn()) {
+            Debug.logVerbose("[Set mode/service]: " + mode + "/" + serviceName, MODULE);
+        }
 
         // some needed info for when running the service
         Locale locale = UtilHttp.getLocale(request);
@@ -125,8 +127,12 @@ public class ServiceMultiEventHandler implements EventHandler {
             throw new EventHandlerException("Problems getting the service model");
         }
 
-        if (Debug.verboseOn()) Debug.logVerbose("[Processing]: SERVICE Event", MODULE);
-        if (Debug.verboseOn()) Debug.logVerbose("[Using delegator]: " + dispatcher.getDelegator().getDelegatorName(), MODULE);
+        if (Debug.verboseOn()) {
+            Debug.logVerbose("[Processing]: SERVICE Event", MODULE);
+        }
+        if (Debug.verboseOn()) {
+            Debug.logVerbose("[Using delegator]: " + dispatcher.getDelegator().getDelegatorName(), MODULE);
+        }
 
         // check if we are using per row submit
         boolean useRowSubmit = request.getParameter("_useRowSubmit") == null ? false :
@@ -182,7 +188,7 @@ public class ServiceMultiEventHandler implements EventHandler {
                 boolean rowSelected = false;
                 if (UtilValidate.isNotEmpty(request.getAttribute(UtilHttp.getRowSubmitPrefix() + i))) {
                     rowSelected = request.getAttribute(UtilHttp.getRowSubmitPrefix() + i) == null ? false :
-                    "Y".equalsIgnoreCase((String)request.getAttribute(UtilHttp.getRowSubmitPrefix() + i));
+                    "Y".equalsIgnoreCase((String) request.getAttribute(UtilHttp.getRowSubmitPrefix() + i));
                 } else {
                     rowSelected = request.getParameter(UtilHttp.getRowSubmitPrefix() + i) == null ? false :
                     "Y".equalsIgnoreCase(request.getParameter(UtilHttp.getRowSubmitPrefix() + i));
@@ -332,7 +338,7 @@ public class ServiceMultiEventHandler implements EventHandler {
 
                     // get the success messages
                     if (UtilValidate.isNotEmpty(result.get(ModelService.SUCCESS_MESSAGE))) {
-                        String newSuccessMessage = (String)result.get(ModelService.SUCCESS_MESSAGE);
+                        String newSuccessMessage = (String) result.get(ModelService.SUCCESS_MESSAGE);
                         if (!successMessages.contains(newSuccessMessage)) {
                             successMessages.add(newSuccessMessage);
                         }
@@ -353,9 +359,9 @@ public class ServiceMultiEventHandler implements EventHandler {
                         String resultKey = rme.getKey();
                         Object resultValue = rme.getValue();
 
-                        if (resultKey != null && !ModelService.RESPONSE_MESSAGE.equals(resultKey) && !ModelService.ERROR_MESSAGE.equals(resultKey) &&
-                                !ModelService.ERROR_MESSAGE_LIST.equals(resultKey) && !ModelService.ERROR_MESSAGE_MAP.equals(resultKey) &&
-                                !ModelService.SUCCESS_MESSAGE.equals(resultKey) && !ModelService.SUCCESS_MESSAGE_LIST.equals(resultKey)) {
+                        if (resultKey != null && !ModelService.RESPONSE_MESSAGE.equals(resultKey) && !ModelService.ERROR_MESSAGE.equals(resultKey)
+                                && !ModelService.ERROR_MESSAGE_LIST.equals(resultKey) && !ModelService.ERROR_MESSAGE_MAP.equals(resultKey)
+                                && !ModelService.SUCCESS_MESSAGE.equals(resultKey) && !ModelService.SUCCESS_MESSAGE_LIST.equals(resultKey)) {
                             //set the result to request w/ and w/o a suffix to handle both cases: to have the result in each iteration and to prevent its overriding
                             request.setAttribute(resultKey + curSuffix, resultValue);
                             request.setAttribute(resultKey, resultValue);

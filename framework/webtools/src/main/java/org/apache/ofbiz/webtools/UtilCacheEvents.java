@@ -43,7 +43,7 @@ public final class UtilCacheEvents {
     private static final String MODULE = UtilCacheEvents.class.getName();
 
 
-    private UtilCacheEvents() {}
+    private UtilCacheEvents() { }
 
     /** An HTTP WebEvent handler the specified element from the specified cache
      * @param request The HTTP request object for the current JSP or Servlet request.
@@ -175,7 +175,6 @@ public final class UtilCacheEvents {
         request.setAttribute("_EVENT_MESSAGE_", errMsg + " (" + UtilDateTime.nowDateString("yyyy-MM-dd HH:mm:ss")  + ").");
         return "success";
     }
-    
     /** An HTTP WebEvent handler that clears the selected caches
      * @param request The HTTP request object for the current JSP or Servlet request.
      * @param response The HTTP response object for the current JSP or Servlet request.
@@ -199,7 +198,7 @@ public final class UtilCacheEvents {
         int rowCount = UtilHttp.getMultiFormRowCount(ctx);
         for (int i = 0; i < rowCount; i++) {
             String suffix = UtilHttp.getMultiRowDelimiter() + i;
-            isSelected = (ctx.containsKey("_rowSubmit" + suffix) && "Y".equalsIgnoreCase((String)ctx.get("_rowSubmit" + suffix)));
+            isSelected = (ctx.containsKey("_rowSubmit" + suffix) && "Y".equalsIgnoreCase((String) ctx.get("_rowSubmit" + suffix)));
             if (!isSelected) {
                 continue;
             }

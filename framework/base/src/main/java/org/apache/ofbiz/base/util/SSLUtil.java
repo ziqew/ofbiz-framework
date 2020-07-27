@@ -61,7 +61,7 @@ public final class SSLUtil {
 
     private static boolean loadedProps = false;
 
-    private SSLUtil () {}
+    private SSLUtil() { }
 
     static {
         SSLUtil.loadJsseProperties();
@@ -184,7 +184,7 @@ public final class SSLUtil {
         if (alias != null) {
             for (int i = 0; i < keyManagers.length; i++) {
                 if (keyManagers[i] instanceof X509KeyManager) {
-                    keyManagers[i] = new AliasKeyManager((X509KeyManager)keyManagers[i], alias);
+                    keyManagers[i] = new AliasKeyManager((X509KeyManager) keyManagers[i], alias);
                 }
             }
         }
@@ -249,48 +249,40 @@ public final class SSLUtil {
 
     public static HostnameVerifier getHostnameVerifier(int level) {
         switch (level) {
-            case HOSTCERT_MIN_CHECK:
-                return new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        Certificate[] peerCerts;
-                        try {
-                            peerCerts = session.getPeerCertificates();
-                        } catch (SSLPeerUnverifiedException e) {
-                            // cert not verified
-                            Debug.logWarning(e.getMessage(), MODULE);
-                            return false;
+        case HOSTCERT_MIN_CHECK:
+            return (hostname, session) -> {
+                Certificate[] peerCerts;
+                try {
+                    peerCerts = session.getPeerCertificates();
+                } catch (SSLPeerUnverifiedException e) {
+                    // cert not verified
+                    Debug.logWarning(e.getMessage(), MODULE);
+                    return false;
+                }
+                for (Certificate peerCert : peerCerts) {
+                    try {
+                        Principal x500s = session.getPeerPrincipal();
+                        Map<String, String> subjectMap = KeyStoreUtil.getX500Map(x500s);
+                        if (Debug.infoOn()) {
+                            byte[] encodedCert = peerCert.getEncoded();
+                            Debug.logInfo(new BigInteger(encodedCert).toString(16)
+                                    + " :: " + subjectMap.get("CN"), MODULE);
                         }
-                        for (Certificate peerCert : peerCerts) {
-                            try {
-                                Principal x500s = session.getPeerPrincipal();
-                                Map<String, String> subjectMap = KeyStoreUtil.getX500Map(x500s);
-                                if (Debug.infoOn()) {
-                                    byte[] encodedCert = peerCert.getEncoded();
-                                    Debug.logInfo(new BigInteger(encodedCert).toString(16)
-                                            + " :: " + subjectMap.get("CN"), MODULE);
-                                }
-                                peerCert.verify(peerCert.getPublicKey());
-                            } catch (RuntimeException e) {
-                                throw e;
-                            } catch (Exception e) {
-                                // certificate not valid
-                                Debug.logWarning("Certificate is not valid!", MODULE);
-                                return false;
-                            }
-                        }
-                        return true;
+                        peerCert.verify(peerCert.getPublicKey());
+                    } catch (RuntimeException e) {
+                        throw e;
+                    } catch (Exception e) {
+                        // certificate not valid
+                        Debug.logWarning("Certificate is not valid!", MODULE);
+                        return false;
                     }
-                };
-            case HOSTCERT_NO_CHECK:
-                return new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                };
-            default:
-                return null;
+                }
+                return true;
+            };
+        case HOSTCERT_NO_CHECK:
+            return (hostname, session) -> true;
+        default:
+            return null;
         }
     }
 
@@ -318,7 +310,7 @@ public final class SSLUtil {
             }
 
             if (debug) {
-                System.setProperty("javax.net.debug","ssl:handshake");
+                System.setProperty("javax.net.debug", "ssl:handshake");
             }
             loadedProps = true;
         }

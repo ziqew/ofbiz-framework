@@ -31,6 +31,7 @@ import org.apache.ofbiz.entity.GenericPK;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.model.ModelEntity;
+import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.entity.util.EntityFindOptions;
 import org.apache.ofbiz.entity.util.EntityListIterator;
@@ -65,7 +66,9 @@ public class GenericHelperDAO implements GenericHelper {
             return null;
         }
         int retVal = genericDAO.insert(value);
-        if (Debug.verboseOn()) Debug.logVerbose("Insert Return Value : " + retVal, MODULE);
+        if (Debug.verboseOn()) {
+            Debug.logVerbose("Insert Return Value : " + retVal, MODULE);
+        }
         return value;
     }
 
@@ -125,8 +128,12 @@ public class GenericHelperDAO implements GenericHelper {
      */
     @Override
     public int removeByPrimaryKey(GenericPK primaryKey) throws GenericEntityException {
-        if (primaryKey == null) return 0;
-        if (Debug.verboseOn()) Debug.logVerbose("Removing GenericPK: " + primaryKey.toString(), MODULE);
+        if (primaryKey == null) {
+            return 0;
+        }
+        if (Debug.verboseOn()) {
+            Debug.logVerbose("Removing GenericPK: " + primaryKey.toString(), MODULE);
+        }
         return genericDAO.delete(primaryKey);
     }
 
@@ -157,6 +164,12 @@ public class GenericHelperDAO implements GenericHelper {
     @Override
     public long findCountByCondition(Delegator delegator, ModelEntity modelEntity, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition, EntityFindOptions findOptions) throws GenericEntityException {
         return genericDAO.selectCountByCondition(delegator, modelEntity, whereEntityCondition, havingEntityCondition, findOptions);
+    }
+
+    @Override
+    public long findCountByCondition(Delegator delegator, ModelEntity modelEntity, EntityCondition whereEntityCondition,
+            EntityCondition havingEntityCondition, List<ModelField> selectFields, EntityFindOptions findOptions) throws GenericEntityException {
+        return genericDAO.selectCountByCondition(delegator, modelEntity, whereEntityCondition, havingEntityCondition, selectFields, findOptions);
     }
 
     /** Removes/deletes Generic Entity records found by all the specified condition

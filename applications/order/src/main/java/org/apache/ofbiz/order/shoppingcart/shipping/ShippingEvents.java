@@ -146,7 +146,7 @@ public class ShippingEvents {
             BigDecimal shippableTotal, String partyId, String productStoreShipMethId) {
         return getShipGroupEstimate(dispatcher, delegator, orderTypeId, shipmentMethodTypeId, carrierPartyId,
                 carrierRoleTypeId, shippingContactMechId, productStoreId, null, itemInfo,
-                shippableWeight, shippableQuantity, shippableTotal, partyId,productStoreShipMethId);
+                shippableWeight, shippableQuantity, shippableTotal, partyId, productStoreShipMethId);
     }
 
     public static Map<String, Object> getShipGroupEstimate(LocalDispatcher dispatcher, Delegator delegator, String orderTypeId,
@@ -269,7 +269,7 @@ public class ShippingEvents {
         // Check if minimum price is set for any Shipping Option, if yes, 
         // compare it with total shipping and use greater of the two.
         BigDecimal minimumPrice = storeShipMethod.getBigDecimal("minimumPrice");
-        if (UtilValidate.isNotEmpty(minimumPrice) && shippingTotal.compareTo(minimumPrice) < 0){
+        if (UtilValidate.isNotEmpty(minimumPrice) && shippingTotal.compareTo(minimumPrice) < 0) {
              shippingTotal = minimumPrice;
         }
 
@@ -279,7 +279,7 @@ public class ShippingEvents {
         return responseResult;
     }
 
-    public static BigDecimal getGenericShipEstimate(LocalDispatcher dispatcher, GenericValue storeShipMeth, Map <String, ? extends Object>context) throws GeneralException {
+    public static BigDecimal getGenericShipEstimate(LocalDispatcher dispatcher, GenericValue storeShipMeth, Map<String, ? extends Object>context) throws GeneralException {
         // invoke the generic estimate service next -- append to estimate amount
         Map<String, Object> genericEstimate = null;
         BigDecimal genericShipAmt = null;
@@ -299,7 +299,6 @@ public class ShippingEvents {
         }
         return genericShipAmt;
     }
-    
     public static String getShipmentCustomMethod(Delegator delegator, String shipmentCustomMethodId) {
         String serviceName = null;
         GenericValue customMethod = null;
@@ -346,7 +345,7 @@ public class ShippingEvents {
                 context.put("serviceConfigProps", configProps);
                 context.put("shipmentCustomMethodId", shipmentCustomMethodId);
                 context.put("shipmentGatewayConfigId", shipmentGatewayConfigId);
-                
+
                 // invoke the service
                 Map<String, Object> serviceResp = null;
                 try {
@@ -382,8 +381,7 @@ public class ShippingEvents {
                 EntityCondition.makeCondition("contactMechTypeId", EntityOperator.EQUALS, "POSTAL_ADDRESS"),
                 EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.IN, UtilMisc.toList("SHIP_ORIG_LOCATION", "GENERAL_LOCATION")),
                 EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"),
-                EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate")
-        );
+                EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate"));
         EntityConditionList<EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
         List<GenericValue> addresses = delegator.findList("PartyContactWithPurpose", ecl, null, UtilMisc.toList("contactMechPurposeTypeId DESC"), null, false);

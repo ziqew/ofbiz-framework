@@ -116,7 +116,7 @@ public final class SqlJdbcUtil {
         fieldTypeMap.put("java.util.LinkedList", 15);
     }
 
-    private SqlJdbcUtil () {}
+    private SqlJdbcUtil() { }
     /** Makes the FROM clause and when necessary the JOIN clause(s) as well */
     public static String makeFromClause(ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader, Datasource datasourceInfo) throws GenericEntityException {
         StringBuilder sql = new StringBuilder(" FROM ");
@@ -434,12 +434,16 @@ public final class SqlJdbcUtil {
         //String fieldPrefix = includeTablenamePrefix ? (modelEntity.getTableName(datasourceInfo) + ".") : "";
 
         if (UtilValidate.isNotEmpty(orderBy)) {
-            if (Debug.verboseOn()) Debug.logVerbose("Order by list contains: " + orderBy.size() + " entries.", MODULE);
+            if (Debug.verboseOn()) {
+                Debug.logVerbose("Order by list contains: " + orderBy.size() + " entries.", MODULE);
+            }
             OrderByList orderByList = new OrderByList(orderBy);
             orderByList.checkOrderBy(modelEntity);
             orderByList.makeOrderByString(sql, modelEntity, includeTablenamePrefix, datasourceInfo);
         }
-        if (Debug.verboseOn()) Debug.logVerbose("makeOrderByClause: " + sql.toString(), MODULE);
+        if (Debug.verboseOn()) {
+            Debug.logVerbose("makeOrderByClause: " + sql.toString(), MODULE);
+        }
         return sql.toString();
     }
 
@@ -462,7 +466,7 @@ public final class SqlJdbcUtil {
             }
             sql.append(makeFromClause(modelEntity, modelFieldTypeReader, datasourceInfo));
             String viewWhereClause = makeViewWhereClause(modelEntity, datasourceInfo.getJoinStyle());
-            ModelViewEntity modelViewEntity = (ModelViewEntity)modelEntity;
+            ModelViewEntity modelViewEntity = (ModelViewEntity) modelEntity;
             List<EntityCondition> whereConditions = new LinkedList<>();
             List<EntityCondition> havingConditions = new LinkedList<>();
             List<String> orderByList = new LinkedList<>();
@@ -470,7 +474,7 @@ public final class SqlJdbcUtil {
             modelViewEntity.populateViewEntityConditionInformation(modelFieldTypeReader, whereConditions, havingConditions, orderByList, null);
             String viewConditionClause;
             if (!whereConditions.isEmpty()) {
-                viewConditionClause = EntityCondition.makeCondition(whereConditions, EntityOperator.AND).makeWhereString(modelViewEntity,  null, datasourceInfo);
+                viewConditionClause = EntityCondition.makeCondition(whereConditions, EntityOperator.AND).makeWhereString(modelViewEntity, null, datasourceInfo);
             } else {
                 viewConditionClause = null;
             }
@@ -572,8 +576,7 @@ public final class SqlJdbcUtil {
         while (curField.getEncryptMethod().isEncrypted() && model instanceof ModelViewEntity) {
             ModelViewEntity modelView = (ModelViewEntity) model;
             String entityName = modelView.getAliasedEntity(
-                    modelView.getAlias(curField.getName()).getEntityAlias(), entity.getDelegator().getModelReader()
-            ).getEntityName();
+                    modelView.getAlias(curField.getName()).getEntityAlias(), entity.getDelegator().getModelReader()).getEntityName();
             model = entity.getDelegator().getModelEntity(entityName);
         }
         String encryptionKeyName = model.getEntityName();
@@ -796,10 +799,14 @@ public final class SqlJdbcUtil {
                 in = new ObjectInputStream(binaryInput);
                 return in.readObject();
             } catch (IOException ex) {
-                if (Debug.verboseOn()) Debug.logVerbose("Unable to read BLOB data from input stream while getting value : " + curField.getName() + " [" + curField.getColName() + "] (" + ind + "): " + ex.toString(), MODULE);
+                if (Debug.verboseOn()) {
+                    Debug.logVerbose("Unable to read BLOB data from input stream while getting value : " + curField.getName() + " [" + curField.getColName() + "] (" + ind + "): " + ex.toString(), MODULE);
+                }
                 return null;
             } catch (ClassNotFoundException ex) {
-                if (Debug.verboseOn()) Debug.logVerbose("Class not found: Unable to cast BLOB data to an Java object while getting value: " + curField.getName() + " [" + curField.getColName() + "] (" + ind + "); most likely because it is a straight byte[], so just using the raw bytes" + ex.toString(), MODULE);
+                if (Debug.verboseOn()) {
+                    Debug.logVerbose("Class not found: Unable to cast BLOB data to an Java object while getting value: " + curField.getName() + " [" + curField.getColName() + "] (" + ind + "); most likely because it is a straight byte[], so just using the raw bytes" + ex.toString(), MODULE);
+                }
                 return null;
             } finally {
                 if (in != null) {
@@ -868,11 +875,13 @@ public final class SqlJdbcUtil {
                     fieldClassName = "byte[]";
                 }
 
-                if (Debug.verboseOn()) Debug.logVerbose("type of field " + entityName + "." + modelField.getName() +
-                        " is " + fieldClassName + ", was expecting " + mft.getJavaType() + "; this may " +
-                        "indicate an error in the configuration or in the class, and may result " +
-                        "in an SQL-Java data conversion error. Will use the real field type: " +
-                        fieldClassName + ", not the definition.", MODULE);
+                if (Debug.verboseOn()) {
+                    Debug.logVerbose("type of field " + entityName + "." + modelField.getName()
+                            + " is " + fieldClassName + ", was expecting " + mft.getJavaType() + "; this may "
+                            + "indicate an error in the configuration or in the class, and may result "
+                            + "in an SQL-Java data conversion error. Will use the real field type: "
+                            + fieldClassName + ", not the definition.", MODULE);
+                }
                 fieldType = fieldClassName;
             }
         }

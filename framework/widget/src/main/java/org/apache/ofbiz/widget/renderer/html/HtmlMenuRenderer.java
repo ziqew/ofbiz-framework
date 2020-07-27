@@ -55,7 +55,7 @@ public class HtmlMenuRenderer extends HtmlWidgetRenderer implements MenuStringRe
 
     public static final String MODULE = HtmlMenuRenderer.class.getName();
 
-    protected HtmlMenuRenderer() {}
+    protected HtmlMenuRenderer() { }
 
     public HtmlMenuRenderer(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -264,7 +264,7 @@ public class HtmlMenuRenderer extends HtmlWidgetRenderer implements MenuStringRe
         appendWhitespace(writer);
         renderEndingBoundaryComment(writer, "Menu Widget", modelMenu);
 
-        GenericValue userLogin = (GenericValue)request.getSession().getAttribute("userLogin");
+        GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         if (userLogin != null) {
             String userLoginId = userLogin.getString("userLoginId");
             setUserLoginIdAtPermGrant(userLoginId);
@@ -312,16 +312,16 @@ public class HtmlMenuRenderer extends HtmlWidgetRenderer implements MenuStringRe
 
     public boolean userLoginIdHasChanged() {
         boolean hasChanged = false;
-        GenericValue userLogin = (GenericValue)request.getSession().getAttribute("userLogin");
+        GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         userLoginIdAtPermGrant = getUserLoginIdAtPermGrant();
         String userLoginId = null;
         if (userLogin != null) {
             userLoginId = userLogin.getString("userLoginId");
         }
         if ((userLoginId == null && userLoginIdAtPermGrant != null)
-           || (userLoginId != null && userLoginIdAtPermGrant == null)
-           || ((userLoginId != null && userLoginIdAtPermGrant != null)
-              && !userLoginId.equals(userLoginIdAtPermGrant))) {
+                || (userLoginId != null && userLoginIdAtPermGrant == null)
+                || ((userLoginId != null && userLoginIdAtPermGrant != null)
+                && !userLoginId.equals(userLoginIdAtPermGrant))) {
             hasChanged = true;
         } else {
             if (userLoginIdAtPermGrant != null) {
@@ -421,9 +421,9 @@ public class HtmlMenuRenderer extends HtmlWidgetRenderer implements MenuStringRe
 
             writer.append(" href=\"");
             if ("hidden-form".equals(linkType)) {
-                    writer.append("javascript:document.");
-                    writer.append(uniqueItemName);
-                    writer.append(".submit()");
+                writer.append("javascript:document.");
+                writer.append(uniqueItemName);
+                writer.append(".submit()");
             } else {
                 WidgetWorker.buildHyperlinkUrl(writer, target, link.getUrlMode(), link.getParameterMap(context), link.getPrefix(context),
                         link.getFullPath(), link.getSecure(), link.getEncode(), request, response, context);

@@ -61,7 +61,7 @@ import com.lowagie.text.pdf.PdfReader;
 public class CompDocServices {
     private static final String MODULE = CompDocServices.class.getName();
     private static final String RESOURCE = "ContentUiLabels";
-    
+
     /**
      *
      * Creates the topmost Content entity of a Composite Document tree.
@@ -76,9 +76,9 @@ public class CompDocServices {
         Map<String, Object> result = new HashMap<>();
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale)context.get("locale");
-        GenericValue userLogin = (GenericValue)context.get("userLogin");
-        String contentId = (String)context.get("contentId");
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String contentId = (String) context.get("contentId");
 
         if (UtilValidate.isNotEmpty(contentId)) {
             try {
@@ -165,7 +165,7 @@ public class CompDocServices {
                 if (dataResource != null) {
                     inputMimeType = dataResource.getString("mimeTypeId");
                 }
-                byte [] inputByteArray = null;
+                byte[] inputByteArray = null;
                 PdfReader reader = null;
                 if (inputMimeType != null && "application/pdf".equals(inputMimeType)) {
                     ByteBuffer byteBuffer = DataResourceWorker.getContentAsByteBuffer(delegator, thisDataResourceId, https, webSiteId, locale, rootDir);
@@ -225,7 +225,7 @@ public class CompDocServices {
                 }
                 if (reader != null) {
                     int n = reader.getNumberOfPages();
-                    for (int i=0; i < n; i++) {
+                    for (int i = 0; i < n; i++) {
                         PdfImportedPage pg = writer.getImportedPage(reader, i + 1);
                         writer.addPage(pg);
                     }
@@ -288,7 +288,7 @@ public class CompDocServices {
             if (dataResource != null) {
                 inputMimeType = dataResource.getString("mimeTypeId");
             }
-            byte [] inputByteArray = null;
+            byte[] inputByteArray = null;
             if (inputMimeType != null && "application/pdf".equals(inputMimeType)) {
                 ByteBuffer byteBuffer = DataResourceWorker.getContentAsByteBuffer(delegator, dataResourceId, https, webSiteId, locale, rootDir);
                 inputByteArray = byteBuffer.array();
@@ -326,7 +326,7 @@ public class CompDocServices {
                             return ServiceUtil.returnError(UtilProperties.getMessage(RESOURCE, "ContentSurveyErrorBuildingPDF", locale), null, null, survey2PdfResults);
                         }
 
-                        ByteBuffer outByteBuffer = (ByteBuffer)survey2PdfResults.get("outByteBuffer");
+                        ByteBuffer outByteBuffer = (ByteBuffer) survey2PdfResults.get("outByteBuffer");
                         inputByteArray = outByteBuffer.array();
                     } else {
                         // Fill in acroForm

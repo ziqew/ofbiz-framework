@@ -114,14 +114,13 @@ public class GiftCertificateServices {
                 if (ServiceUtil.isError(acctResult)) {
                     return ServiceUtil.returnError(ServiceUtil.getErrorMessage(acctResult));
                 }
-                
             } else {
                 Map<String, Object> createAccountCtx = new HashMap<>();
                 createAccountCtx.put("ownerPartyId", partyId);
                 createAccountCtx.put("finAccountTypeId", FinAccountHelper.getGiftCertFinAccountTypeId());
                 createAccountCtx.put("productStoreId", productStoreId);
                 createAccountCtx.put("currencyUomId", currency);
-                createAccountCtx.put("finAccountName", accountName + " for party ["+partyId+"]");
+                createAccountCtx.put("finAccountName", accountName + " for party [" + partyId + "]");
                 createAccountCtx.put("userLogin", userLogin);
                 acctResult = dispatcher.runSync("createFinAccountForStore", createAccountCtx);
                 if (ServiceUtil.isError(acctResult)) {
@@ -461,7 +460,7 @@ public class GiftCertificateServices {
                     "AccountingGiftCertificateNumberCannotProcess",
                     UtilMisc.toMap("errorString", ex.getMessage()), locale));
         }
-}
+    }
 
 
     public static Map<String, Object> giftCertificateAuthorize(DispatchContext dctx, Map<String, ? extends Object> context) {
@@ -497,13 +496,13 @@ public class GiftCertificateServices {
                         finAccount = EntityQuery.use(delegator).from("FinAccount").where("finAccountId", finAccountId).queryOne();
                     }
                 } else {
-                        finAccount = FinAccountHelper.getFinAccountFromCode(giftCard.getString("cardNumber"), delegator);
-                        if (finAccount == null) {
-                            return ServiceUtil.returnError(UtilProperties.getMessage(RES_ERROR,
-                                    "AccountingGiftCertificateNumberNotFound",
-                                    UtilMisc.toMap("finAccountId", ""), locale));
-                        }
-                        finAccountId = finAccount.getString("finAccountId");
+                    finAccount = FinAccountHelper.getFinAccountFromCode(giftCard.getString("cardNumber"), delegator);
+                    if (finAccount == null) {
+                        return ServiceUtil.returnError(UtilProperties.getMessage(RES_ERROR,
+                                "AccountingGiftCertificateNumberNotFound",
+                                UtilMisc.toMap("finAccountId", ""), locale));
+                    }
+                    finAccountId = finAccount.getString("finAccountId");
                 }
             } else {
                 return ServiceUtil.returnError(UtilProperties.getMessage(RES_ERROR,
@@ -619,7 +618,6 @@ public class GiftCertificateServices {
             BigDecimal amount, String currency, String resultPrefix, Locale locale) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
-        
         // get the orderId for tracking
         String orderId = paymentPref.getString("orderId");
         OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
@@ -702,7 +700,7 @@ public class GiftCertificateServices {
         try {
             orderHeader = orderItem.getRelatedOne("OrderHeader", false);
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Unable to get OrderHeader from OrderItem",MODULE);
+            Debug.logError(e, "Unable to get OrderHeader from OrderItem", MODULE);
             return ServiceUtil.returnError(UtilProperties.getMessage(RES_ORDERError,
                     "OrderCannotGetOrderHeader", UtilMisc.toMap("orderId", orderId), locale));
         }
@@ -945,7 +943,7 @@ public class GiftCertificateServices {
         try {
             orderHeader = orderItem.getRelatedOne("OrderHeader", false);
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Unable to get OrderHeader from OrderItem",MODULE);
+            Debug.logError(e, "Unable to get OrderHeader from OrderItem", MODULE);
             return ServiceUtil.returnError(UtilProperties.getMessage(RES_ORDERError,
                     "OrderCannotGetOrderHeader", UtilMisc.toMap("orderId", orderId), locale));
         }
@@ -1236,9 +1234,7 @@ public class GiftCertificateServices {
             if (ServiceUtil.isError(returnHeaderResp)) {
                 return ServiceUtil.returnError(ServiceUtil.getErrorMessage(returnHeaderResp));
             }
-            
             String returnId = (String) returnHeaderResp.get("returnId");
-            
             if (UtilValidate.isEmpty(returnId)) {
                 return ServiceUtil.returnError(UtilProperties.getMessage(RES_ORDERError,
                         "OrderErrorCreateReturnHeaderWithoutId", locale));

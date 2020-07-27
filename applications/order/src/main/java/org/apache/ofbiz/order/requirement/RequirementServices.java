@@ -71,8 +71,7 @@ public class RequirementServices {
         try {
             List<EntityCondition> conditions = UtilMisc.toList(
                     EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"),
-                    EntityUtil.getFilterByDateExpr()
-                   );
+                    EntityUtil.getFilterByDateExpr());
             if (UtilValidate.isNotEmpty(statusIds)) {
                 conditions.add(EntityCondition.makeCondition("statusId", EntityOperator.IN, statusIds));
             } else {
@@ -119,7 +118,7 @@ public class RequirementServices {
                 BigDecimal requiredQuantity = requirement.getBigDecimal("quantity");
 
                 // get an available supplier product, preferably the one with the smallest minimum quantity to order, followed by price
-                String supplierKey =  partyId + "^" + productId;
+                String supplierKey = partyId + "^" + productId;
                 GenericValue supplierProduct = suppliers.get(supplierKey);
                 if (supplierProduct == null) {
                     // TODO: it is possible to restrict to quantity > minimumOrderQuantity, but then the entire requirement must be skipped
@@ -171,8 +170,7 @@ public class RequirementServices {
                                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
                                 EntityCondition.makeCondition("orderStatusId", EntityOperator.NOT_IN, UtilMisc.toList("ORDER_REJECTED", "ORDER_CANCELLED")),
                                 EntityCondition.makeCondition("orderItemStatusId", EntityOperator.NOT_IN, UtilMisc.toList("ITEM_REJECTED", "ITEM_CANCELLED")),
-                                EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, timePeriodStart)
-                               ), EntityOperator.AND);
+                                EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, timePeriodStart)), EntityOperator.AND);
                     GenericValue count = EntityQuery.use(delegator).select("quantityOrdered").from("OrderItemQuantityReportGroupByProduct").where(prodConditions).queryFirst();
                     if (count != null) {
                         sold = count.getBigDecimal("quantityOrdered");
@@ -227,10 +225,10 @@ public class RequirementServices {
                 GenericValue item = EntityQuery.use(delegator).from("OrderItem").where("orderId", orderItemAndShipGroup.getString("orderId"), "orderItemSeqId", orderItemAndShipGroup.getString("orderItemSeqId")).queryOne();
                 GenericValue product = item.getRelatedOne("Product", false);
                 if (product == null) continue;
-                if ((!"PRODRQM_AUTO".equals(product.get("requirementMethodEnumId")) &&
-                        !"PRODRQM_AUTO".equals(productStore.get("requirementMethodEnumId"))) ||
-                        (product.get("requirementMethodEnumId") == null &&
-                           !"PRODRQM_AUTO".equals(productStore.get("requirementMethodEnumId")))) continue;
+                if ((!"PRODRQM_AUTO".equals(product.get("requirementMethodEnumId"))
+                        && !"PRODRQM_AUTO".equals(productStore.get("requirementMethodEnumId")))
+                        || (product.get("requirementMethodEnumId") == null
+                        && !"PRODRQM_AUTO".equals(productStore.get("requirementMethodEnumId")))) continue;
                 BigDecimal quantity = item.getBigDecimal("quantity");
                 BigDecimal cancelQuantity = item.getBigDecimal("cancelQuantity");
                 BigDecimal required = quantity.subtract(cancelQuantity == null ? BigDecimal.ZERO : cancelQuantity);
@@ -249,9 +247,7 @@ public class RequirementServices {
                     return ServiceUtil.returnError(ServiceUtil.getErrorMessage(results));
                 }
             }
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericServiceException e) {
+        } catch (GenericEntityException | GenericServiceException e) {
             Debug.logError(e, MODULE);
         }
         return ServiceUtil.returnSuccess();
@@ -291,8 +287,8 @@ public class RequirementServices {
                 GenericValue product = item.getRelatedOne("Product", false);
                 if (product == null) continue;
 
-                if (!("PRODRQM_ATP".equals(product.get("requirementMethodEnumId")) ||
-                        ("PRODRQM_ATP".equals(productStore.get("requirementMethodEnumId")) && product.get("requirementMethodEnumId") == null))) continue;
+                if (!("PRODRQM_ATP".equals(product.get("requirementMethodEnumId"))
+                    || ("PRODRQM_ATP".equals(productStore.get("requirementMethodEnumId")) && product.get("requirementMethodEnumId") == null))) continue;
 
                 BigDecimal quantity = item.getBigDecimal("quantity");
                 BigDecimal cancelQuantity = item.getBigDecimal("cancelQuantity");
@@ -345,9 +341,7 @@ public class RequirementServices {
                     return ServiceUtil.returnError(ServiceUtil.getErrorMessage(results));
                 }
             }
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericServiceException e) {
+        } catch (GenericEntityException | GenericServiceException e) {
             Debug.logError(e, MODULE);
         }
         return ServiceUtil.returnSuccess();
@@ -360,7 +354,7 @@ public class RequirementServices {
         String orderId = (String) context.get("orderId");
         OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
         try {
-            for(GenericValue orderItem: orh.getOrderItems()){
+            for (GenericValue orderItem: orh.getOrderItems()) {
                 GenericValue orderRequirementCommitment = EntityQuery.use(delegator).from("OrderRequirementCommitment")
                         .where(UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.getString("orderItemSeqId")))
                         .queryFirst();
@@ -375,9 +369,7 @@ public class RequirementServices {
                     }
                 }
             }
-        } catch(GenericEntityException e){
-            Debug.logError(e, MODULE);
-        } catch(GenericServiceException e){
+        } catch (GenericEntityException | GenericServiceException e) {
             Debug.logError(e, MODULE);
         }
         return ServiceUtil.returnSuccess();

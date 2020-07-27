@@ -270,7 +270,9 @@ public class UelFunctions {
             } catch (NoSuchMethodException | NullPointerException | SecurityException e) {
                 Debug.logError(e, "Error while initializing UelFunctions.Functions instance", MODULE);
             }
-            if (Debug.verboseOn()) Debug.logVerbose("UelFunctions.Functions loaded " + this.functionMap.size() + " functions", MODULE);
+            if (Debug.verboseOn()) {
+                Debug.logVerbose("UelFunctions.Functions loaded " + this.functionMap.size() + " functions", MODULE);
+            }
         }
         @Override
         public Method resolveFunction(String prefix, String localName) {
@@ -443,15 +445,13 @@ public class UelFunctions {
             if (url != null) {
                 try (InputStream is = url.openStream();) {
                     document = UtilXml.readXmlDocument(is, str);
-                }
-                catch (SAXException | ParserConfigurationException e) {
+                } catch (SAXException | ParserConfigurationException e) {
                     Debug.logError(e, "Error while reading XML document " + str, MODULE);
                 }
             } else {
                 Debug.logError("Unable to locate XML document " + str, MODULE);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Debug.logError(e, "Error while reading XML document " + str, MODULE);
         }
         return document;

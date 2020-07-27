@@ -47,7 +47,9 @@ public class OfbizContentTransform implements TemplateTransformModel {
         String  result = "";
         Object obj = args.get(key);
         if (obj != null) {
-            if (Debug.verboseOn()) Debug.logVerbose("Arg Object : " + obj.getClass().getName(), MODULE);
+            if (Debug.verboseOn()) {
+                Debug.logVerbose("Arg Object : " + obj.getClass().getName(), MODULE);
+            }
             if (obj instanceof TemplateScalarModel) {
                 TemplateScalarModel s = (TemplateScalarModel) obj;
                 try {
@@ -81,7 +83,7 @@ public class OfbizContentTransform implements TemplateTransformModel {
             public void close() throws IOException {
                 try {
                     Environment env = Environment.getCurrentEnvironment();
-                    BeanModel req = (BeanModel)env.getVariable("request");
+                    BeanModel req = (BeanModel) env.getVariable("request");
                     HttpServletRequest request = req == null ? null : (HttpServletRequest) req.getWrappedObject();
 
                     String requestUrl = buf.toString();
@@ -97,13 +99,13 @@ public class OfbizContentTransform implements TemplateTransformModel {
                     // make the link
                     StringBuilder newURL = new StringBuilder();
                     ContentUrlTag.appendContentPrefix(request, newURL);
-                    if ((newURL.length() > 0 && newURL.charAt(newURL.length() - 1) != '/') 
-                    		&& (requestUrl.length()> 0 && requestUrl.charAt(0) != '/')) {
+                    if ((newURL.length() > 0 && newURL.charAt(newURL.length() - 1) != '/')
+                    && (requestUrl.length()> 0 && requestUrl.charAt(0) != '/')) {
                         newURL.append('/');
                     }
 
-                    if(UtilValidate.isNotEmpty(imgSize)){
-                        if(!"/images/defaultImage.jpg".equals(requestUrl)){
+                    if (UtilValidate.isNotEmpty(imgSize)) {
+                        if (!"/images/defaultImage.jpg".equals(requestUrl)) {
                             int index = requestUrl.lastIndexOf(".");
                             if (index > 0) {
                                 String suffix = requestUrl.substring(index);

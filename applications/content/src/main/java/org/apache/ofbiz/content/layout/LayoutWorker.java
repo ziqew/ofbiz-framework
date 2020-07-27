@@ -47,7 +47,7 @@ public final class LayoutWorker {
     private static final String MODULE = LayoutWorker.class.getName();
     private static final String err_resource = "ContentErrorUiLabels";
 
-    private LayoutWorker() {}
+    private LayoutWorker() { }
 
     /**
      * Uploads image data from a form and stores it in ImageDataResource.
@@ -61,12 +61,12 @@ public final class LayoutWorker {
         Map<String, String> formInput = new HashMap<>();
         results.put("formInput", formInput);
 
-        Delegator delegator = (Delegator)request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         long maxUploadSize = UtilHttp.getMaxUploadSize(delegator);
         int sizeThreshold = UtilHttp.getSizeThreshold(delegator);
         File tmpUploadRepository = UtilHttp.getTmpUploadRepository(delegator);
-        
+
         ServletFileUpload upload = new ServletFileUpload(new DiskFileItemFactory(sizeThreshold, tmpUploadRepository));
         upload.setSizeMax(maxUploadSize);
 
@@ -77,7 +77,7 @@ public final class LayoutWorker {
             return ServiceUtil.returnError(e4.getMessage());
         }
 
-        if(lst.size() == 0 && UtilValidate.isNotEmpty(request.getAttribute("fileItems"))) {
+        if (lst.size() == 0 && UtilValidate.isNotEmpty(request.getAttribute("fileItems"))) {
             lst = UtilGenerics.cast(request.getAttribute("fileItems"));
         }
         if (lst.size() == 0) {
@@ -92,8 +92,8 @@ public final class LayoutWorker {
         // This code finds the idField and the upload FileItems
         FileItem fi = null;
         FileItem imageFi = null;
-        for (int i=0; i < lst.size(); i++) {
-            fi = lst.get(i);
+        for (FileItem fileItem : lst) {
+            fi = fileItem;
             String fieldName = fi.getFieldName();
             String fieldStr = fi.getString();
             if (fi.isFormField()) {

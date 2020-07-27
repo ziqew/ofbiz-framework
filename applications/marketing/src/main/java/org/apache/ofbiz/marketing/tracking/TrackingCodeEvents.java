@@ -178,11 +178,15 @@ public class TrackingCodeEvents {
         //check effective dates
         java.sql.Timestamp nowStamp = UtilDateTime.nowTimestamp();
         if (trackingCode.get("fromDate") != null && nowStamp.before(trackingCode.getTimestamp("fromDate"))) {
-            if (Debug.infoOn()) Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has not yet gone into effect, ignoring this trackingCodeId", MODULE);
+            if (Debug.infoOn()) {
+                Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has not yet gone into effect, ignoring this trackingCodeId", MODULE);
+            }
             return "success";
         }
         if (trackingCode.get("thruDate") != null && nowStamp.after(trackingCode.getTimestamp("thruDate"))) {
-            if (Debug.infoOn()) Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has expired, ignoring this trackingCodeId", MODULE);
+            if (Debug.infoOn()) {
+                Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has expired, ignoring this trackingCodeId", MODULE);
+            }
             return "success";
         }
 
@@ -273,8 +277,7 @@ public class TrackingCodeEvents {
                 String siteIdEnc;
                 try {
                     siteIdEnc = URLEncoder.encode(siteId, "UTF-8");
-                }
-                catch (UnsupportedEncodingException e) {
+                } catch (UnsupportedEncodingException e) {
                     Debug.logWarning("There went something wrong while encoding for the cookie creation in TrackingCodeEvents.processTrackingCode", MODULE);
                     return "error";
                 }
@@ -307,7 +310,7 @@ public class TrackingCodeEvents {
         String prodCatalogId = trackingCode.getString("prodCatalogId");
         if (UtilValidate.isNotEmpty(prodCatalogId)) {
             session.setAttribute("CURRENT_CATALOG_ID", prodCatalogId);
-            CategoryWorker.setTrail(request, new LinkedList<String>());
+            CategoryWorker.setTrail(request, new LinkedList<>());
         }
 
         // if forward/redirect is needed, do a response.sendRedirect and return null to tell the control servlet to not do any other requests/views
@@ -355,11 +358,15 @@ public class TrackingCodeEvents {
 
                         //check effective dates
                         if (trackingCode.get("fromDate") != null && nowStamp.before(trackingCode.getTimestamp("fromDate"))) {
-                            if (Debug.infoOn()) Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has not yet gone into effect, ignoring this trackingCodeId", MODULE);
+                            if (Debug.infoOn()) {
+                                Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has not yet gone into effect, ignoring this trackingCodeId", MODULE);
+                            }
                             continue;
                         }
                         if (trackingCode.get("thruDate") != null && nowStamp.after(trackingCode.getTimestamp("thruDate"))) {
-                            if (Debug.infoOn()) Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has expired, ignoring this trackingCodeId", MODULE);
+                            if (Debug.infoOn()) {
+                                Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has expired, ignoring this trackingCodeId", MODULE);
+                            }
                             continue;
                         }
 
@@ -506,15 +513,19 @@ public class TrackingCodeEvents {
         if (trackingCode != null) {
             //check effective dates
             if (trackingCode.get("fromDate") != null && nowStamp.before(trackingCode.getTimestamp("fromDate"))) {
-                if (Debug.infoOn()) Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has not yet gone into effect, ignoring this trackingCodeId", MODULE);
+                if (Debug.infoOn()) {
+                    Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has not yet gone into effect, ignoring this trackingCodeId", MODULE);
+                }
             }
             if (trackingCode.get("thruDate") != null && nowStamp.after(trackingCode.getTimestamp("thruDate"))) {
-                if (Debug.infoOn()) Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has expired, ignoring this trackingCodeId", MODULE);
+                if (Debug.infoOn()) {
+                    Debug.logInfo("The TrackingCode with ID [" + trackingCodeId + "] has expired, ignoring this trackingCodeId", MODULE);
+                }
             }
             GenericValue trackingCodeOrder = delegator.makeValue("TrackingCodeOrder",
                     UtilMisc.toMap("trackingCodeTypeId", trackingCode.get("trackingCodeTypeId"),
                     "trackingCodeId", trackingCodeId, "isBillable", isBillable, "siteId", siteId,
-                    "hasExported", "N", "affiliateReferredTimeStamp",affiliateReferredTimeStamp));
+                    "hasExported", "N", "affiliateReferredTimeStamp", affiliateReferredTimeStamp));
 
             Debug.logInfo(" trackingCodeOrder is " + trackingCodeOrder, MODULE);
             trackingCodeOrders.add(trackingCodeOrder);

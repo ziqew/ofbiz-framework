@@ -45,7 +45,7 @@ public final class WidgetWorker {
 
     private static final String MODULE = WidgetWorker.class.getName();
 
-    private WidgetWorker () {}
+    private WidgetWorker() { }
 
     public static void buildHyperlinkUrl(Appendable externalWriter, String target, String targetType, Map<String, String> parameterMap,
             String prefix, boolean fullPath, boolean secure, boolean encode, HttpServletRequest request, HttpServletResponse response, Map<String, Object> context) throws IOException {
@@ -118,10 +118,10 @@ public final class WidgetWorker {
         }
 
         String tokenValue = CsrfUtil.generateTokenForNonAjax(request, target);
-        if (UtilValidate.isNotEmpty(tokenValue)){
+        if (UtilValidate.isNotEmpty(tokenValue)) {
             String currentString = externalWriter.toString();
-            if(currentString.startsWith("<form")) {
-                currentString = currentString.substring(currentString.lastIndexOf("\"")+1);
+            if (currentString.startsWith("<form")) {
+                currentString = currentString.substring(currentString.lastIndexOf("\"") + 1);
             }
             if (currentString.indexOf('?') == -1) {
                 externalWriter.append("?" + CsrfUtil.getTokenNameNonAjax() + "=" + tokenValue);
@@ -195,7 +195,7 @@ public final class WidgetWorker {
                 writer.append(modelFormField.getAction(context));
                 writer.append('"');
             }
-            if (UtilValidate.isNotEmpty(confirmation)){
+            if (UtilValidate.isNotEmpty(confirmation)) {
                 writer.append(" onclick=\"return confirm('");
                 writer.append(confirmation);
                 writer.append("')\"");
@@ -235,7 +235,7 @@ public final class WidgetWorker {
                 writer.append('"');
             }
 
-            if (UtilValidate.isNotEmpty(confirmation)){
+            if (UtilValidate.isNotEmpty(confirmation)) {
                 writer.append(" onclick=\"return confirm('");
                 writer.append(confirmation);
                 writer.append("')\"");
@@ -354,7 +354,7 @@ public final class WidgetWorker {
     public static int getPaginatorNumber(Map<String, Object> context) {
         int paginator_number = 0;
         if (context != null) {
-            Integer paginateNumberInt= (Integer)context.get("PAGINATOR_NUMBER");
+            Integer paginateNumberInt= (Integer) context.get("PAGINATOR_NUMBER");
             if (paginateNumberInt == null) {
                 paginateNumberInt = 0;
                 context.put("PAGINATOR_NUMBER", paginateNumberInt);
@@ -375,7 +375,7 @@ public final class WidgetWorker {
             if (UtilValidate.isNotEmpty(NO_PAGINATOR)) {
                 globalCtx.remove("NO_PAGINATOR");
             } else {
-                Integer paginateNumberInt= (Integer)globalCtx.get("PAGINATOR_NUMBER");
+                Integer paginateNumberInt= (Integer) globalCtx.get("PAGINATOR_NUMBER");
                 if (paginateNumberInt == null) {
                     paginateNumberInt = 0;
                 }
